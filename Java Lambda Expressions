@@ -1,0 +1,91 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        import java.io.*;
+import java.util.*;
+
+interface PerformOperation {
+    boolean check(int a);
+}
+
+public class Solution {
+
+    public static PerformOperation isOdd() {
+        return (a) -> a % 2 != 0;
+    }
+
+    public static PerformOperation isPrime() {
+        return (a) -> {
+            if (a < 2)
+                return false;
+
+            for (int i = 2; i * i <= a; i++) {
+                if (a % i == 0)
+                    return false;
+            }
+            return true;
+        };
+    }
+
+    public static PerformOperation isPalindrome() {
+        return (a) -> {
+            int original = a;
+            int reverse = 0;
+
+            while (a > 0) {
+                int digit = a % 10;
+                reverse = reverse * 10 + digit;
+                a /= 10;
+            }
+
+            return original == reverse;
+        };
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
+
+        while (T-- > 0) {
+
+            int choice = sc.nextInt();
+            int number = sc.nextInt();
+
+            boolean result = false;
+
+            if (choice == 1) {
+                result = isOdd().check(number);
+
+                if (result)
+                    System.out.println("ODD");
+                else
+                    System.out.println("EVEN");
+
+            } else if (choice == 2) {
+                result = isPrime().check(number);
+
+                if (result)
+                    System.out.println("PRIME");
+                else
+                    System.out.println("COMPOSITE");
+
+            } else if (choice == 3) {
+                result = isPalindrome().check(number);
+
+                if (result)
+                    System.out.println("PALINDROME");
+                else
+                    System.out.println("NOT PALINDROME");
+            }
+        }
+
+        sc.close();
+    }
+}
