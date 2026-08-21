@@ -1,0 +1,125 @@
+import java.io.*;
+import java.util.*;
+
+class Result {
+
+    public static List<Integer> circularPalindromes(String s) {
+        int n = s.length();
+        List<Integer> result = new ArrayList<>();
+
+        for (int start = 0; start < n; start++) {
+
+            String rotation =
+                s.substring(start) + s.substring(0, start);
+
+            result.add(longestPalindrome(rotation));
+        }
+
+        return result;
+    }
+
+    private static int longestPalindrome(String s) {
+        int n = s.length();
+
+        int[] d1 = new int[n];
+
+        int left = 0;
+        int right = -1;
+
+        // Odd-length palindromes
+        for (int i = 0; i < n; i++) {
+
+            int k;
+
+            if (i > right) {
+                k = 1;
+            } else {
+                k = Math.min(d1[left + right - i],
+                             right - i + 1);
+            }
+
+            while (i - k >= 0 &&
+                   i + k < n &&
+                   s.charAt(i - k) == s.charAt(i + k)) {
+                k++;
+            }
+
+            d1[i] = k;
+
+            k--;
+
+            if (i + k > right) {
+                left = i - k;
+                right = i + k;
+            }
+        }
+
+        int[] d2 = new int[n];
+
+        left = 0;
+        right = -1;
+
+        // Even-length palindromes
+        for (int i = 0; i < n; i++) {
+
+            int k;
+
+            if (i > right) {
+                k = 0;
+            } else {
+                k = Math.min(
+                    d2[left + right - i + 1],
+                    right - i + 1
+                );
+            }
+
+            while (i - k - 1 >= 0 &&
+                   i + k < n &&
+                   s.charAt(i - k - 1) == s.charAt(i + k)) {
+                k++;
+            }
+
+            d2[i] = k;
+
+            k--;
+
+            if (i + k > right) {
+                left = i - k - 1;
+                right = i + k;
+            }
+        }
+
+        int answer = 1;
+
+        for (int i = 0; i < n; i++) {
+            answer = Math.max(answer, 2 * d1[i] - 1);
+            answer = Math.max(answer, 2 * d2[i]);
+        }
+
+        return answer;
+    }
+}
+
+public class Solution {
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader bufferedReader =
+            new BufferedReader(new InputStreamReader(System.in));
+
+        int n = Integer.parseInt(
+            bufferedReader.readLine().trim()
+        );
+
+        String s = bufferedReader.readLine().trim();
+
+        List<Integer> result =
+            Result.circularPalindromes(s);
+
+        for (int value : result) {
+            System.out.println(value);
+        }
+
+        bufferedReader.close();
+    }
+}
